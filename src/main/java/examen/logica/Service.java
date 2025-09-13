@@ -108,17 +108,13 @@ public class Service {
             }
     }
 
-    public void updateTarea(Tarea t) throws Exception {
+    public Tarea readTarea(Tarea t) throws Exception {
         Tarea result = data.getTareas().stream()
                 .filter(i -> i.getNumero().equals(t.getNumero()))
                 .findFirst()
                 .orElse(null);
         if (result != null) {
-            result.setDescripcion(t.getDescripcion());
-            result.setFechaFinalizacion(t.getFechaFinalizacion());
-            result.setPrioridad(t.getPrioridad());
-            result.setResponsable(t.getResponsable());
-            result.setEstado(t.getEstado());
+            return result;
         } else {
             throw new Exception("Tarea no existe");
         }
@@ -131,5 +127,28 @@ public class Service {
                 .collect(Collectors.toList());
     }
 
+    public void addTareaAProyecto(Proyecto p, Tarea t) throws Exception {
+        Proyecto proyecto = readProyecto(p);
+        Tarea tarea = readTarea(t);
+        if (!proyecto.getTareas().contains(tarea)) {
+            proyecto.getTareas().add(tarea);
+        } else {
+            throw new Exception("La tarea ya está asignada al proyecto");
+        }
+    }
 
+    public void updateTareaDeProyecto(Proyecto proyectoSeleccionado, Tarea t) {
+        Proyecto proyecto = data.getProyectos().stream()
+                .filter(p -> p.getCodigo().equals(proyectoSeleccionado.getCodigo()))
+                .findFirst()
+                .orElse(null);
+        if (proyecto != null) {
+            for (int i = 0; i < proyecto.getTareas().size(); i++) {
+                if (proyecto.getTareas().get(i).getNumero().equals(t.getNumero())) {
+                    proyecto.getTareas().set(i, t);
+                    return;
+                }
+            }
+        }
+    }
 }
