@@ -13,7 +13,7 @@ public class XmlPersister {
 
     public static XmlPersister instance() {
         if (theInstance == null) {
-            theInstance = new XmlPersister("data.xml");
+            theInstance = new XmlPersister("datos.xml");
         }
         return theInstance;
     }

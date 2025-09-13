@@ -3,7 +3,6 @@ package examen.presentacion.examen;
 import examen.presentacion.BaseTableModel;
 import examen.logica.Proyecto;
 
-import javax.swing.*;
 import java.util.List;
 import javax.swing.table.TableModel;
 
@@ -19,7 +18,7 @@ public class TableModelProyectos extends BaseTableModel<Proyecto> implements Tab
         switch (cols[col]){
             case 0: return p.getCodigo();
             case 1: return p.getDescripcion();
-            case 2: return p.getEncargado().getNombre();
+            case 2: return p.getEncargado().getName();
             case 3: return p.getNumeroTareas();
             default: return null;
         }

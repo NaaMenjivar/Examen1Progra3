@@ -78,19 +78,26 @@ public class View implements PropertyChangeListener {
     }
 
     private void initComponents() {
-        // Inicializar los combo boxes con los valores de los enums
         comboPrioridad.setModel(new DefaultComboBoxModel<>(Prioridad.values()));
         comboEstado.setModel(new DefaultComboBoxModel<>(Estado.values()));
 
-        // Inicializar label del proyecto seleccionado
         lblProyectoSeleccionado.setText("No hay proyecto seleccionado");
 
-        // Deshabilitar formulario de tareas inicialmente
-        panelCrearTarea.setVisible(false);
+        panelCrearTarea.setVisible(true);
+        lblDescripcionTarea.setVisible(false);
+        txtDescripcionTarea.setVisible(false);
+        venceLbl.setVisible(false);
+        txtFechaFin.setVisible(false);
+        prioridadLbl.setVisible(false);
+        comboPrioridad.setVisible(false);
+        estadoLbl.setVisible(false);
+        comboEstado.setVisible(false);
+        responsableLbl.setVisible(false);
+        comboResponsable.setVisible(false);
+        crearTarea.setVisible(false);
     }
 
     private void setupEventListeners() {
-        // Listener para selección de proyectos
         tablaProyectos.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 int selectedRow = tablaProyectos.getSelectedRow();
@@ -104,7 +111,6 @@ public class View implements PropertyChangeListener {
             }
         });
 
-        // Listener para doble click en tareas (editar tarea) - DESCOMENTADO
         tablaTareas.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -145,8 +151,12 @@ public class View implements PropertyChangeListener {
                 break;
 
             case Model.USUARIOS_COMBO:
-                usuariosComboBox.setModel(new DefaultComboBoxModel<>(model.getUsuariosParaCombo().toArray(new Usuario[0])));
-                comboResponsable.setModel(new DefaultComboBoxModel<>(model.getUsuariosParaCombo().toArray(new Usuario[0])));
+                if (model.getUsuariosParaCombo() != null && !model.getUsuariosParaCombo().isEmpty()) {
+                    Usuario[] usuariosArray = model.getUsuariosParaCombo().toArray(new Usuario[0]);
+
+                    usuariosComboBox.setModel(new DefaultComboBoxModel<>(usuariosArray));
+                    comboResponsable.setModel(new DefaultComboBoxModel<>(usuariosArray));
+                }
                 break;
 
             case Model.PROYECTO_SELECCIONADO:
@@ -156,9 +166,31 @@ public class View implements PropertyChangeListener {
 
                     lblProyectoSeleccionado.setText(model.getProyectoSeleccionado().getDescripcion());
                     panelCrearTarea.setVisible(true);
+                    lblDescripcionTarea.setVisible(true);
+                    txtDescripcionTarea.setVisible(true);
+                    venceLbl.setVisible(true);
+                    txtFechaFin.setVisible(true);
+                    prioridadLbl.setVisible(true);
+                    comboPrioridad.setVisible(true);
+                    estadoLbl.setVisible(true);
+                    comboEstado.setVisible(true);
+                    responsableLbl.setVisible(true);
+                    comboResponsable.setVisible(true);
+                    crearTarea.setVisible(true);
                 } else {
                     lblProyectoSeleccionado.setText("No hay proyecto seleccionado");
                     panelCrearTarea.setVisible(false);
+                    lblDescripcionTarea.setVisible(false);
+                    txtDescripcionTarea.setVisible(false);
+                    venceLbl.setVisible(false);
+                    txtFechaFin.setVisible(false);
+                    prioridadLbl.setVisible(false);
+                    comboPrioridad.setVisible(false);
+                    estadoLbl.setVisible(false);
+                    comboEstado.setVisible(false);
+                    responsableLbl.setVisible(false);
+                    comboResponsable.setVisible(false);
+                    crearTarea.setVisible(false);
                 }
                 break;
 
@@ -239,24 +271,18 @@ public class View implements PropertyChangeListener {
         return true;
     }
 
-    // MÉTODO INTEGRADO USANDO EL DialogoEditarTarea EXISTENTE
     public void mostrarDialogoEditarTarea(Tarea tarea) {
         if (tarea == null) {
             JOptionPane.showMessageDialog(panelPrincipal, "No hay tarea seleccionada", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Crear instancia del diálogo personalizado
         DialogoEditarTarea dialogo = new DialogoEditarTarea();
 
-        // Configurar el diálogo
         dialogo.setTitle("Editando " + tarea.getNumero());
         dialogo.setLocationRelativeTo(panelPrincipal);
-
-        // Configurar los valores iniciales en el diálogo
         dialogo.configurarTarea(tarea, controller, this);
 
-        // Mostrar el diálogo
         dialogo.setVisible(true);
     }
 }

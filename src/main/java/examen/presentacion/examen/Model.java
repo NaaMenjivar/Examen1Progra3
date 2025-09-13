@@ -1,5 +1,6 @@
 package examen.presentacion.examen;
 
+import examen.datos.LectorUsuarios;
 import examen.logica.Proyecto;
 import examen.logica.Tarea;
 import examen.logica.Usuario;
@@ -63,6 +64,12 @@ public class Model extends AbstractModel {
     public void setTareasDelProyecto(List<Tarea> tareasDelProyecto) {
         this.tareasDelProyecto = tareasDelProyecto;
         firePropertyChange(TAREAS_PROYECTO);
+    }
+
+    public void cargarUsuariosDesdeXML(String rutaArchivo) {
+        LectorUsuarios lector = new LectorUsuarios(rutaArchivo);
+        List<Usuario> lista = lector.leerUsuarios();
+        setUsuariosParaCombo(lista);
     }
 
 }
