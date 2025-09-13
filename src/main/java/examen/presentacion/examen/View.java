@@ -104,8 +104,8 @@ public class View implements PropertyChangeListener {
             }
         });
 
-        // Listener para doble click en tareas (editar tarea)
-        /*tablaTareas.addMouseListener(new MouseAdapter() {
+        // Listener para doble click en tareas (editar tarea) - DESCOMENTADO
+        tablaTareas.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
@@ -117,7 +117,7 @@ public class View implements PropertyChangeListener {
                     }
                 }
             }
-        });*/
+        });
     }
 
     public JPanel getPanel() {
@@ -239,64 +239,24 @@ public class View implements PropertyChangeListener {
         return true;
     }
 
-    /*public void mostrarDialogoEditarTarea(Tarea tarea) {
+    // MÉTODO INTEGRADO USANDO EL DialogoEditarTarea EXISTENTE
+    public void mostrarDialogoEditarTarea(Tarea tarea) {
         if (tarea == null) {
             JOptionPane.showMessageDialog(panelPrincipal, "No hay tarea seleccionada", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Crear el diálogo
-        JDialog dialogo = new JDialog((JFrame) SwingUtilities.getWindowAncestor(panelPrincipal), "Editando " + tarea.getNumero(), true);
-        dialogo.setSize(400, 200);
+        // Crear instancia del diálogo personalizado
+        DialogoEditarTarea dialogo = new DialogoEditarTarea();
+
+        // Configurar el diálogo
+        dialogo.setTitle("Editando " + tarea.getNumero());
         dialogo.setLocationRelativeTo(panelPrincipal);
 
-        // Crear componentes del diálogo
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        // Configurar los valores iniciales en el diálogo
+        dialogo.configurarTarea(tarea, controller, this);
 
-        // Panel para prioridad
-        JPanel panelPrioridad = new JPanel();
-        panelPrioridad.add(new JLabel("Seleccione la nueva prioridad:"));
-        JComboBox<Prioridad> comboPrioridadEdit = new JComboBox<>(Prioridad.values());
-        comboPrioridadEdit.setSelectedItem(tarea.getPrioridad());
-        panelPrioridad.add(comboPrioridadEdit);
-
-        // Panel para estado
-        JPanel panelEstado = new JPanel();
-        panelEstado.add(new JLabel("Seleccione el nuevo estado:"));
-        JComboBox<Estado> comboEstadoEdit = new JComboBox<>(Estado.values());
-        comboEstadoEdit.setSelectedItem(tarea.getEstado());
-        panelEstado.add(comboEstadoEdit);
-
-        // Panel para botones
-        JPanel panelBotones = new JPanel();
-        JButton btnOK = new JButton("OK");
-        JButton btnCancelar = new JButton("Cancel");
-
-        btnOK.addActionListener(e -> {
-            try {
-                Prioridad nuevaPrioridad = (Prioridad) comboPrioridadEdit.getSelectedItem();
-                Estado nuevoEstado = (Estado) comboEstadoEdit.getSelectedItem();
-
-                controller.editarTarea(tarea, nuevaPrioridad, nuevoEstado);
-                dialogo.dispose();
-                JOptionPane.showMessageDialog(panelPrincipal, "Tarea editada exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(panelPrincipal, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-
-        btnCancelar.addActionListener(e -> dialogo.dispose());
-
-        panelBotones.add(btnOK);
-        panelBotones.add(btnCancelar);
-
-        // Agregar componentes al panel principal
-        panel.add(panelPrioridad);
-        panel.add(panelEstado);
-        panel.add(panelBotones);
-
-        dialogo.add(panel);
+        // Mostrar el diálogo
         dialogo.setVisible(true);
-    }*/
+    }
 }
